@@ -17,7 +17,7 @@
     <router-link to="/admin">Admin</router-link>
   </div>
   <footer>
-      <a href="https://github.com/BYU-CS-260-Winter-2020/lab-4-museum-of-ordinary-objects-darrow97.git" target="_blank">Click here for access to the Git Repository</a>
+      <a href="https://github.com/darrow97/creativeproject4" target="_blank">Click here for access to the Git Repository</a>
     </footer>
 </div>
 </template>
