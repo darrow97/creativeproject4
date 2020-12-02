@@ -1,10 +1,11 @@
 <template>
   <div class="home">
     <section class="image-gallery">
-      <div class="image" v-for="item in items" :key="item.id">
-        <h2>{{item.title}}</h2>
-        <img :src="item.path" />
-        <p>{{item.description}}</p>
+      <div class="image" v-for="character in characters" :key="character.id">
+        <img :src="character.path" />
+        <h2>{{character.name}}</h2>
+        <h3>{{character.race}}</h3>
+        <!-- <p>{{character.description}}</p> -->
       </div>
     </section>
   </div>
@@ -18,17 +19,17 @@ export default {
   name: 'Home',
   data() {
     return {
-     items: [],
+     characters: [],
     }
   },
   created() {
-   this.getItems();
+   this.getCharacters();
   },
   methods: {
-    async getItems() {
+    async getCharacters() {
       try {
-        let response = await axios.get("/api/items");
-        this.items = response.data;
+        let response = await axios.get("/api/characters");
+        this.characters = response.data;
         return true;
       } catch (error) {
         // console.log(error);

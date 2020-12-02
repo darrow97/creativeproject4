@@ -34,7 +34,7 @@
          <div class="upload" v-if="addRace">
            <h2>{{addRace.race}}</h2>
            <img :src="addRace.path" />
-           <!-- <p>{{addItem.description}}</p> -->
+           <!-- <p>{{addRace.description}}</p> -->
          </div>
          <!-- <div class="suggestions" v-if="suggestions.length > 0">
            <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectItem(s)">{{s.title}}
@@ -101,7 +101,7 @@
             path: r1.data.path,
             // description: this.description
           });
-          this.addClass = r2.data;
+          this.addRace = r2.data;
         } catch (error) {
           console.log(error);
         }
