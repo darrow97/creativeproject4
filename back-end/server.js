@@ -30,15 +30,19 @@ const characterSchema = new mongoose.Schema({
   path: String,
 });
 
-const resourceSchema = new mongoose.Schema({
+const classSchema = new mongoose.Schema({
+  class: String
+});
+
+const raceSchema = new mongoose.Schema({
   class: String,
-  race: String,
   path: String
 });
 
 // Create a model for items in the museum.
 const Character = mongoose.model('Character', characterSchema);
-const Resource = mongoose.model('Resource', resourceSchema);
+const Class = mongoose.model('Class', classSchema);
+const Race = mongoose.model('Race', raceSchema);
 
 // Upload a photo. Uses the multer middleware for the upload and then returns
 // the path where the photo is stored in the file system.
@@ -70,15 +74,27 @@ app.post('/api/characters', async (req, res) => {
   }
 });
 
-app.post('/api/resources', async (req,res) => {
-  const resource = new Resource({
-    class: req.body.class,
+app.post('/api/classes', async (req,res) => {
+  const _class = new Class({
+    class: req.body.class
+  });
+  try {
+    await _class.save();
+    res.send(_class);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+app.post('/api/races', async (req,res) => {
+  const _race = new Race({
     race: req.body.race,
     path: req.body.path
   });
   try {
-    await resource.save();
-    res.send(resource);
+    await _race.save();
+    res.send(_race);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
@@ -96,10 +112,20 @@ app.get('/api/characters', async (req, res) => {
   }
 });
 
-app.get('api/resources', async (req,res) => {
+app.get('api/classes', async (req,res) => {
   try {
-    let resources = await Resource.find();
-    res.send(resources);
+    let _class = await Class.find();
+    res.send(_class);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+app.get('api/races', async (req,res) => {
+  try {
+    let _race = await Race.find();
+    res.send(_race);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
