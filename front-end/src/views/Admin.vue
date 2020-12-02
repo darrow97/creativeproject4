@@ -1,57 +1,92 @@
 <template>
   <div>
     <h1>Administrative Page</h1>
-    <div class="heading">
-      <div class="circle"></div>
-      <h2>Add a Class</h2>
-    </div>
-    <!-- ADD A CLASS -->
-    <div class="add">
-      <div class="form">
-        <input v-model="className" placeholder="Class">
-        <p></p>
-        <!-- <input type="file" name="photo" @change="fileChanged"> -->
-        <!-- <button @click="upload">Upload</button> -->
-        <!-- <textarea v-model="description" rows="8" cols="80"></textarea> -->
-      </div>
-      <!-- <div class="upload" v-if="addClass">
-        <h2>{{addClass.class}}</h2>
-        <img :src="addClass.path" />
-        <p>{{addItem.description}}</p>
-      </div> -->
-    </div>
-    <!-- ADD A RACE -->
-    <div class="heading">
-     <div class="circle"></div>
-     <h2>Add a Race</h2>
-     </div>
-     <div class="add">
-       <div class="form">
-         <input v-model="raceName" placeholder="Race">
-         <p></p>
-         <input type="file" name="photo" @change="fileChanged">
-         <button @click="upload">Upload</button>
-         <div class="upload" v-if="addRace">
-           <h2>{{addRace.race}}</h2>
-           <img :src="addRace.path" />
-           <!-- <p>{{addRace.description}}</p> -->
+    <div class="box">
+      <div class="addThings">
+        <div class="heading">
+          <div class="circle"></div>
+          <h2>Add a Class</h2>
+        </div>
+        <!-- ADD A CLASS -->
+        <div class="add">
+          <div class="form">
+            <input v-model="className" placeholder="Class">
+            <p></p>
+            <!-- <input type="file" name="photo" @change="fileChanged"> -->
+            <button @click="uploadClass">Upload</button>
+            <!-- <textarea v-model="description" rows="8" cols="80"></textarea> -->
+          </div>
+          <!-- <div class="upload" v-if="addClass">
+            <h2>{{addClass.class}}</h2>
+            <img :src="addClass.path" />
+            <p>{{addItem.description}}</p>
+          </div> -->
+        </div>
+        <!-- ADD A RACE -->
+        <div class="heading">
+         <div class="circle"></div>
+         <h2>Add a Race</h2>
          </div>
-         <!-- <div class="suggestions" v-if="suggestions.length > 0">
-           <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectItem(s)">{{s.title}}
+         <div class="add">
+           <div class="form">
+             <input v-model="raceName" placeholder="Race">
+             <p></p>
+             <input type="file" name="photo" @change="fileChanged">
+             <button @click="uploadRace">Upload</button>
+             <div class="upload" v-if="addRace">
+               <h2>{{addRace.race}}</h2>
+               <img :src="addRace.path" />
+               <!-- <p>{{addRace.description}}</p> -->
+             </div>
+             <!-- <div class="suggestions" v-if="suggestions.length > 0">
+               <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectItem(s)">{{s.title}}
+               </div>
+             </div> -->
            </div>
-         </div> -->
+           <!-- <div class="upload" v-if="findItem">
+             <input v-model="findItem.title">
+             <p></p>
+             <img :src="findItem.path" />
+           </div> -->
+           <!-- <div class="actions" v-if="findItem">
+             <button @click="deleteItem(findItem)">Delete</button>
+             <button @click="editItem(findItem)">Edit</button>
+             <textarea v-model="findItem.description" rows="8" cols="80"></textarea>
+           </div> -->
+         </div>
+      </div>
+       <!-- LIST OF RACES AND CLASSES -->
+       <div class="list">
+         <div class="classes">
+           <div class="heading">
+             <div class="circle"></div>
+             <h2>Classes</h2>
+           </div>
+           <div>
+             <div v-for="_class in classes" :key="_class._id">
+               <ul>
+                 <li>{{_class.class}}</li>
+               </ul>
+             </div>
+           </div>
+         </div>
+         <div class="races">
+           <div class="heading">
+             <div class="circle"></div>
+             <h2>Races</h2>
+           </div>
+           <div>
+             <div v-for="race in races" :key="race._id">
+               <ul>
+                 <li>{{race.race}}</li>
+               </ul>
+             </div>
+           </div>
+         </div>
        </div>
-       <!-- <div class="upload" v-if="findItem">
-         <input v-model="findItem.title">
-         <p></p>
-         <img :src="findItem.path" />
-       </div> -->
-       <!-- <div class="actions" v-if="findItem">
-         <button @click="deleteItem(findItem)">Delete</button>
-         <button @click="editItem(findItem)">Edit</button>
-         <textarea v-model="findItem.description" rows="8" cols="80"></textarea>
-       </div> -->
-     </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -71,7 +106,7 @@
         file: null,
         addRace: null,
         classes: [],
-        races: []
+        races: [],
         // items: [],
         // findTitle: "",
         // findItem: null,
@@ -91,13 +126,23 @@
       fileChanged(event) {
           this.file = event.target.files[0]
       },
-      async upload() {
+      async uploadClass() {
+        try {
+          let c1 = await axios.post('/api/classes', {
+            class: this.className
+          });
+          this.addClass = c1.data;
+        } catch (e) {
+          console.log(e);
+        }
+      },
+      async uploadRace() {
         try {
           const formData = new FormData();
           formData.append('photo', this.file, this.file.name)
           let r1 = await axios.post('/api/photos', formData);
           let r2 = await axios.post('/api/races', {
-            race: this.race,
+            race: this.raceName,
             path: r1.data.path,
             // description: this.description
           });
@@ -110,6 +155,7 @@
         try {
           let response = await axios.get("/api/classes");
           this.classes = response.data;
+          console.log(this.classes);
           return true;
         } catch (error) {
           console.log(error);
@@ -157,10 +203,45 @@
 
 
 <style scoped>
-  .image h2 {
+  .box {
+    display: flex;
+    /* flex-flow: row; */
+  }
+
+  .addThings {
+
+  }
+
+  .list {
+    /* float: left; */
+    display: flex;
+    /* flex-flow: row; */
+  }
+
+  /* .list ul {
+    display: block;
+  } */
+  ul {
+    list-style-type: none;
+  }
+
+  li {
+    display: block;
+  }
+
+  .classes {
+    /* float: left;
+    clear: left; */
+  }
+
+  .races {
+    /* float: left; */
+  }
+
+  /* .image h2 {
     font-style: italic;
     font-size: 1em;
-  }
+  } */
 
   .heading {
     display: flex;
@@ -187,6 +268,8 @@
     color: #fff;
     text-align: center
   }
+
+
 
   /* Form */
   input,

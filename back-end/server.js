@@ -35,7 +35,7 @@ const classSchema = new mongoose.Schema({
 });
 
 const raceSchema = new mongoose.Schema({
-  class: String,
+  race: String,
   path: String
 });
 
@@ -101,7 +101,6 @@ app.post('/api/races', async (req,res) => {
   }
 });
 
-// Get a list of all of the items in the museum.
 app.get('/api/characters', async (req, res) => {
   try {
     let characters = await Character.find();
@@ -112,20 +111,20 @@ app.get('/api/characters', async (req, res) => {
   }
 });
 
-app.get('api/classes', async (req,res) => {
+app.get('/api/classes', async (req,res) => {
   try {
-    let _class = await Class.find();
-    res.send(_class);
+    let classes = await Class.find();
+    res.send(classes);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
   }
 });
 
-app.get('api/races', async (req,res) => {
+app.get('/api/races', async (req,res) => {
   try {
-    let _race = await Race.find();
-    res.send(_race);
+    let race = await Race.find();
+    res.send(race);
   } catch (e) {
     console.log(e);
     res.sendStatus(500);
