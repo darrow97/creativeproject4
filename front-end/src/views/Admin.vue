@@ -1,46 +1,56 @@
 <template>
   <div>
-    <h1>The Admin Page!</h1>
+    <h1>Administrative Page</h1>
     <div class="heading">
-      <div class="circle">1</div>
-      <h2>Add an Item</h2>
+      <div class="circle"></div>
+      <h2>Add a Class</h2>
     </div>
+    <!-- ADD A CLASS -->
     <div class="add">
       <div class="form">
-        <input v-model="title" placeholder="Title">
+        <input v-model="className" placeholder="Class">
         <p></p>
-        <input type="file" name="photo" @change="fileChanged">
-        <button @click="upload">Upload</button>
-        <textarea v-model="description" rows="8" cols="80"></textarea>
+        <!-- <input type="file" name="photo" @change="fileChanged"> -->
+        <!-- <button @click="upload">Upload</button> -->
+        <!-- <textarea v-model="description" rows="8" cols="80"></textarea> -->
       </div>
-      <div class="upload" v-if="addItem">
-        <h2>{{addItem.title}}</h2>
-        <img :src="addItem.path" />
+      <!-- <div class="upload" v-if="addClass">
+        <h2>{{addClass.class}}</h2>
+        <img :src="addClass.path" />
         <p>{{addItem.description}}</p>
-      </div>
+      </div> -->
     </div>
+    <!-- ADD A RACE -->
     <div class="heading">
-     <div class="circle">2</div>
-     <h2>Edit/Delete an Item</h2>
+     <div class="circle"></div>
+     <h2>Add a Race</h2>
      </div>
-     <div class="edit">
+     <div class="add">
        <div class="form">
-         <input v-model="findTitle" placeholder="Search">
-         <div class="suggestions" v-if="suggestions.length > 0">
+         <input v-model="raceName" placeholder="Race">
+         <p></p>
+         <input type="file" name="photo" @change="fileChanged">
+         <button @click="upload">Upload</button>
+         <div class="upload" v-if="addRace">
+           <h2>{{addRace.race}}</h2>
+           <img :src="addRace.path" />
+           <!-- <p>{{addItem.description}}</p> -->
+         </div>
+         <!-- <div class="suggestions" v-if="suggestions.length > 0">
            <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectItem(s)">{{s.title}}
            </div>
-         </div>
+         </div> -->
        </div>
-       <div class="upload" v-if="findItem">
+       <!-- <div class="upload" v-if="findItem">
          <input v-model="findItem.title">
          <p></p>
          <img :src="findItem.path" />
-       </div>
-       <div class="actions" v-if="findItem">
+       </div> -->
+       <!-- <div class="actions" v-if="findItem">
          <button @click="deleteItem(findItem)">Delete</button>
          <button @click="editItem(findItem)">Edit</button>
          <textarea v-model="findItem.description" rows="8" cols="80"></textarea>
-       </div>
+       </div> -->
      </div>
   </div>
 </template>
@@ -55,23 +65,27 @@
     // },
     data() {
       return {
-        title: "",
-        description: "",
+        className: "",
+        raceName: "",
+        // description: "",
         file: null,
-        addItem: null,
-        items: [],
-        findTitle: "",
-        findItem: null,
+        addRace: null,
+        classes: [],
+        races: []
+        // items: [],
+        // findTitle: "",
+        // findItem: null,
       }
     },
-    computed: {
-      suggestions() {
-        let items = this.items.filter(item => item.title.toLowerCase().startsWith(this.findTitle.toLowerCase()));
-        return items.sort((a, b) => a.title > b.title);
-      }
-    },
+    // computed: {
+    //   suggestions() {
+    //     let items = this.items.filter(item => item.title.toLowerCase().startsWith(this.findTitle.toLowerCase()));
+    //     return items.sort((a, b) => a.title > b.title);
+    //   }
+    // },
     created() {
-      this.getItems();
+      this.getClasses();
+      this.getRaces();
     },
     methods: {
       fileChanged(event) {
@@ -82,52 +96,61 @@
           const formData = new FormData();
           formData.append('photo', this.file, this.file.name)
           let r1 = await axios.post('/api/photos', formData);
-          let r2 = await axios.post('/api/items', {
-            title: this.title,
+          let r2 = await axios.post('/api/races', {
+            race: this.race,
             path: r1.data.path,
-            description: this.description
+            // description: this.description
           });
-          this.addItem = r2.data;
+          this.addClass = r2.data;
         } catch (error) {
-          // console.log(error);
+          console.log(error);
         }
       },
-      async getItems() {
+      async getClasses() {
         try {
-          let response = await axios.get("/api/items");
-          this.items = response.data;
+          let response = await axios.get("/api/classes");
+          this.classes = response.data;
           return true;
         } catch (error) {
-          // console.log(error);
+          console.log(error);
         }
       },
-      selectItem(item) {
-        this.findTitle = "";
-        this.findItem = item;
-      },
-      async deleteItem(item) {
+      async getRaces() {
         try {
-          await axios.delete("/api/items/" + item._id);
-          this.findItem = null;
-          this.getItems();
+          let response = await axios.get("/api/races");
+          this.races = response.data;
           return true;
         } catch (error) {
-          // console.log(error);
+          console.log(error);
         }
       },
-      async editItem(item) {
-        try {
-          await axios.put("/api/items/" + item._id, {
-            title: this.findItem.title,
-            description: this.findItem.description
-          });
-          this.findItem = null;
-          this.getItems();
-          return true;
-        } catch (error) {
-          // console.log(error);
-        }
-      },
+      // selectItem(item) {
+      //   this.findTitle = "";
+      //   this.findItem = item;
+      // },
+      // async deleteItem(item) {
+      //   try {
+      //     await axios.delete("/api/items/" + item._id);
+      //     this.findItem = null;
+      //     this.getItems();
+      //     return true;
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // },
+      // async editItem(item) {
+      //   try {
+      //     await axios.put("/api/items/" + item._id, {
+      //       title: this.findItem.title,
+      //       description: this.findItem.description
+      //     });
+      //     this.findItem = null;
+      //     this.getItems();
+      //     return true;
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
+      // },
     }
   }
 </script>
