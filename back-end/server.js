@@ -10,27 +10,35 @@ app.use(bodyParser.urlencoded({
 const mongoose = require('mongoose');
 
 // connect to the database
-mongoose.connect('mongodb://localhost:27017/museum', {
+mongoose.connect('mongodb://localhost:27017/fantasyCreation', {
   useNewUrlParser: true
 });
 
 // Configure multer so that it will upload to '../front-end/public/images'
 const multer = require('multer')
 const upload = multer({
-  dest: '/var/www/museum.nerdxlife.net/images/',
+  dest: '../front-end/public/images/', ///var/www/museum.nerdxlife.net/images/
   limits: {
     fileSize: 10000000
   }
 });
 
-const itemSchema = new mongoose.Schema({
-  title: String,
+const characterSchema = new mongoose.Schema({
+  name: String,
+  race: String,
+  class: String,
   path: String,
-  description: String
+});
+
+const resourceSchema = new mongoose.Schema({
+  class: String,
+  race: String,
+  path: String
 });
 
 // Create a model for items in the museum.
-const Item = mongoose.model('Item', itemSchema);
+const Character = mongoose.model('Character', characterSchema);
+const Resource = mongoose.model('Resource', resourceSchema);
 
 // Upload a photo. Uses the multer middleware for the upload and then returns
 // the path where the photo is stored in the file system.
@@ -45,35 +53,62 @@ app.post('/api/photos', upload.single('photo'), async (req, res) => {
 });
 
 // Create a new item in the museum: takes a title and a path to an image.
-app.post('/api/items', async (req, res) => {
-  const item = new Item({
-    title: req.body.title,
-    path: req.body.path,
-    description: req.body.description
+app.post('/api/characters', async (req, res) => {
+  const character = new Character({
+    name: req.body.title,
+    race: req.body.race,
+    class: req.body.class,
+    path: req.body.path
+    // description: req.body.description
   });
   try {
-    await item.save();
-    res.send(item);
+    await character.save();
+    res.send(character);
   } catch (error) {
     console.log(error);
+    res.sendStatus(500);
+  }
+});
+
+app.post('/api/resources', async (req,res) => {
+  const resource = new Resource({
+    class: req.body.class,
+    race: req.body.race,
+    path: req.body.path
+  });
+  try {
+    await resource.save();
+    res.send(resource);
+  } catch (e) {
+    console.log(e);
     res.sendStatus(500);
   }
 });
 
 // Get a list of all of the items in the museum.
-app.get('/api/items', async (req, res) => {
+app.get('/api/characters', async (req, res) => {
   try {
-    let items = await Item.find();
-    res.send(items);
+    let characters = await Character.find();
+    res.send(characters);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
 });
 
-app.delete('/api/items/:id', async (req,res) => {
+app.get('api/resources', async (req,res) => {
   try {
-    await Item.deleteOne({
+    let resources = await Resource.find();
+    res.send(resources);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+app.delete('/api/characters/:id', async (req,res) => {
+  try {
+    await Character.deleteOne({
       _id: req.params.id
     });
     res.sendStatus(200);
@@ -83,14 +118,14 @@ app.delete('/api/items/:id', async (req,res) => {
   }
 });
 
-app.put('/api/items/:id', async (req,res) => {
+app.put('/api/characters/:id', async (req,res) => {
   try {
-    let item = await Item.findOne({
+    let character = await Character.findOne({
       _id : req.params.id
     });
-    item.title = req.body.title;
-    item.description = req.body.description;
-    item.save();
+    character.name = req.body.name;
+    // item.description = req.body.description;
+    character.save();
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
