@@ -65,12 +65,10 @@ app.post('/api/characters', async (req, res) => {
     path: req.body.path
     // description: req.body.description
   });
-  console.log(character);
   try {
     await character.save();
     res.send(character);
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -83,7 +81,6 @@ app.post('/api/classes', async (req,res) => {
     await _class.save();
     res.send(_class);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -97,7 +94,6 @@ app.post('/api/races', async (req,res) => {
     await _race.save();
     res.send(_race);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -107,7 +103,6 @@ app.get('/api/characters', async (req, res) => {
     let characters = await Character.find();
     res.send(characters);
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 });
@@ -117,7 +112,6 @@ app.get('/api/classes', async (req,res) => {
     let classes = await Class.find();
     res.send(classes);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -127,7 +121,6 @@ app.get('/api/races', async (req,res) => {
     let race = await Race.find();
     res.send(race);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -139,7 +132,6 @@ app.delete('/api/characters/:id', async (req,res) => {
     });
     res.sendStatus(200);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -151,7 +143,6 @@ app.delete('/api/classes/:id', async (req,res) => {
     });
     res.sendStatus(200);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -163,7 +154,6 @@ app.delete('/api/races/:id', async (req,res) => {
     });
     res.sendStatus(200);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
@@ -174,14 +164,12 @@ app.put('/api/characters/:id', async (req,res) => {
       _id : req.params.id
     });
     character.name = req.body.name;
-    // item.description = req.body.description;
     character.save();
     res.sendStatus(200);
   } catch (e) {
-    console.log(e);
     res.sendStatus(500);
   }
 });
 
 
-app.listen(3000, () => console.log('Server listening on port 3000!'));
+app.listen(3001, () => console.log('Server listening on port 3001!'));

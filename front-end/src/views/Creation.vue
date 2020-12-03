@@ -77,7 +77,7 @@
           // console.log(this.classes);
           return true;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       },
       async getRaces() {
@@ -86,17 +86,17 @@
           this.races = response.data;
           return true;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       },
       selectClass(_class) {
-        console.log(_class.class);
+        // console.log(_class.class);
         this.selectedClass = _class;
         this.classSelected = true;
         this.characterReady();
       },
       selectRace(race) {
-        console.log(race.race + " " + race.path);
+        // console.log(race.race + " " + race.path);
         this.selectedRace = race;
         this.raceSelected = true;
         this.characterReady();
@@ -107,7 +107,7 @@
         this.$forceUpdate();
       },
       async createCharacter() {
-        console.log(this.characterName);
+        // console.log(this.characterName);
         try {
           let character = await axios.post('/api/characters', {
 
@@ -117,7 +117,7 @@
             path: this.selectedRace.path
           });
 
-          console.log(character);
+          // console.log(character);
 
           this.addCharacter = character.data;
           this.buildMessage = "Last character created was " + this.characterName;
@@ -127,9 +127,9 @@
           this.isCharacterReady = false;
           this.$forceUpdate();
 
-          console.log("Created!");
+          // console.log("Created!");
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
 
       }

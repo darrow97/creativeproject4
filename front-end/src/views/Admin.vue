@@ -172,17 +172,17 @@
           this.$forceUpdate();
       },
       selectRace(race) {
-        console.log("Selected " + race.race);
+        // console.log("Selected " + race.race);
         this.findRaceName = "";
         this.removeRace = race;
       },
       selectClass(_class) {
-        console.log("Select " + _class.class);
+        // console.log("Select " + _class.class);
         this.findClassName = "";
         this.removeClass = _class;
       },
       selectCharacter(character) {
-        console.log("Select " + character.name);
+        // console.log("Select " + character.name);
         this.findCharacterName = "";
         this.removeCharacter = character;
       },
@@ -195,7 +195,7 @@
           this.className = "";
           this.getClasses();
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       },
       async uploadRace() {
@@ -206,13 +206,12 @@
           let r2 = await axios.post('/api/races', {
             race: this.raceName,
             path: r1.data.path,
-            // description: this.description
           });
           this.addRace = r2.data;
           this.raceName = "";
           this.getRaces();
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       },
       async getClasses() {
@@ -221,7 +220,7 @@
           this.classes = response.data;
           return true;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       },
       async getRaces() {
@@ -230,7 +229,7 @@
           this.races = response.data;
           return true;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       },
       async getCharacters() {
@@ -239,19 +238,19 @@
           this.characters = response.data;
           return true;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       },
       async deleteClass(_class)
       {
-        console.log(_class);
+        // console.log(_class);
         try {
           await axios.delete("/api/classes/" + _class._id);
           this.removeClass = null;
           this.getClasses();
           return true;
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       },
       async deleteRace(race) {
@@ -261,7 +260,7 @@
           this.getRaces();
           return true;
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       },
       async deleteCharacter(character) {
@@ -271,7 +270,7 @@
           this.getCharacters();
           return true;
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       },
     }
