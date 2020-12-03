@@ -8,14 +8,18 @@
     </router-link>
     <div class="title">
       <h1>Fantasy Character Creator</h1>
+      <div class="links">
+        <router-link to="/admin">Admin</router-link>
+        <router-link to="/creation">Character Creation</router-link>
+      </div>
     </div>
   </div>
   <div class="content">
     <router-view />
   </div>
-  <div class="footer">
-    <router-link to="/admin">Admin</router-link>
-  </div>
+  <!-- <div class="footer">
+
+  </div> -->
   <footer>
       <a href="https://github.com/darrow97/creativeproject4" target="_blank">Click here for access to the Git Repository</a>
     </footer>
@@ -34,6 +38,8 @@ body {
   padding: 0px;
   margin: 0px;
 }
+
+
 
 /* Header */
 .header {
@@ -77,6 +83,10 @@ footer
 	position: fixed;
 	left: 0;
 	bottom: 0;
+}
+
+footer a {
+  color: #ffffff;
 }
 
 h1 {

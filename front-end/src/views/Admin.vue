@@ -2,58 +2,71 @@
   <div>
     <h1>Administrative Page</h1>
     <div class="box">
-      <div class="addThings">
-        <div class="heading">
-          <div class="circle"></div>
-          <h2>Add a Class</h2>
-        </div>
+      <!-- CLASS AND RACE CONTENT MANAGEMENT -->
+      <div class="manage">
         <!-- ADD A CLASS -->
-        <div class="add">
-          <div class="form">
-            <input v-model="className" placeholder="Class">
-            <p></p>
-            <!-- <input type="file" name="photo" @change="fileChanged"> -->
-            <button @click="uploadClass">Upload</button>
-            <!-- <textarea v-model="description" rows="8" cols="80"></textarea> -->
+        <div class="addClasses">
+          <div class="heading">
+            <div class="circle"></div>
+            <h2>Add a Class</h2>
           </div>
-          <!-- <div class="upload" v-if="addClass">
-            <h2>{{addClass.class}}</h2>
-            <img :src="addClass.path" />
-            <p>{{addItem.description}}</p>
-          </div> -->
+          <div class="form">
+            <input v-model="className" placeholder="Enter a class type to add">
+            <button @click="uploadClass">Upload</button>
+          </div>
+        </div>
+        <!-- REMOVE A CLASS -->
+        <div class="removeContent">
+          <div class="heading">
+            <div class="circle"></div>
+            <h2>Remove a Class</h2>
+          </div>
+          <input v-if="removeClass" v-model="removeClass.class" placeholder="Remove class">
+          <input v-else placeholder="Select a class from the list">
+          <button @click="deleteClass(removeClass)">Remove</button>
         </div>
         <!-- ADD A RACE -->
-        <div class="heading">
-         <div class="circle"></div>
-         <h2>Add a Race</h2>
+       <div class="addRaces">
+         <div class="heading">
+           <div class="circle"></div>
+           <h2>Add a Race</h2>
          </div>
-         <div class="add">
-           <div class="form">
-             <input v-model="raceName" placeholder="Race">
-             <p></p>
-             <input type="file" name="photo" @change="fileChanged">
-             <button @click="uploadRace">Upload</button>
-             <div class="upload" v-if="addRace">
+         <div class="form">
+           <input type="file" name="photo" @change="fileChanged">
+           <input v-model="raceName" placeholder="Enter a race type to add">
+           <button @click="uploadRace">Upload</button>
+           <div class="upload">
+             <div v-if="addRace">
                <h2>{{addRace.race}}</h2>
                <img :src="addRace.path" />
-               <!-- <p>{{addRace.description}}</p> -->
-             </div>
-             <!-- <div class="suggestions" v-if="suggestions.length > 0">
-               <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectItem(s)">{{s.title}}
-               </div>
-             </div> -->
+             <!-- <p>{{addRace.description}}</p> -->
            </div>
-           <!-- <div class="upload" v-if="findItem">
-             <input v-model="findItem.title">
-             <p></p>
-             <img :src="findItem.path" />
-           </div> -->
-           <!-- <div class="actions" v-if="findItem">
-             <button @click="deleteItem(findItem)">Delete</button>
-             <button @click="editItem(findItem)">Edit</button>
-             <textarea v-model="findItem.description" rows="8" cols="80"></textarea>
-           </div> -->
+           </div>
          </div>
+       </div>
+       <!-- REMOVE A RACE -->
+       <div class="removeContent">
+         <div class="heading">
+           <div class="circle"></div>
+           <h2>Remove a Race</h2>
+         </div>
+         <br>
+         <input v-if="removeRace" v-model="removeRace.race" placeholder="Remove race">
+         <input v-else placeholder="Select a race from the list">
+         <!-- <div class="suggestions" v-if="suggestions.length > 0">
+           <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectRace(s)">{{s.race}}
+           </div>
+         </div> -->
+         <button @click="deleteRace(removeRace)">Remove</button>
+         <div class="upload">
+          <div v-if="removeRace">
+           <h2>{{removeRace.race}}</h2>
+           <img :src="removeRace.path" />
+           <!-- <p>{{addRace.description}}</p> -->
+         </div>
+         </div>
+
+       </div>
       </div>
        <!-- LIST OF RACES AND CLASSES -->
        <div class="list">
@@ -65,7 +78,7 @@
            <div>
              <div v-for="_class in classes" :key="_class._id">
                <ul>
-                 <li>{{_class.class}}</li>
+                 <li @click="selectClass(_class)">{{_class.class}}</li>
                </ul>
              </div>
            </div>
@@ -78,7 +91,7 @@
            <div>
              <div v-for="race in races" :key="race._id">
                <ul>
-                 <li>{{race.race}}</li>
+                 <li @click="selectRace(race)">{{race.race}}</li>
                </ul>
              </div>
            </div>
@@ -102,9 +115,14 @@
       return {
         className: "",
         raceName: "",
-        // description: "",
         file: null,
         addRace: null,
+        removeClass: null,
+        removeRace: null,
+        findRaceName: "",
+        findClassName: "",
+        findRace: null,
+        findClass: null,
         classes: [],
         races: [],
         // items: [],
@@ -114,8 +132,8 @@
     },
     // computed: {
     //   suggestions() {
-    //     let items = this.items.filter(item => item.title.toLowerCase().startsWith(this.findTitle.toLowerCase()));
-    //     return items.sort((a, b) => a.title > b.title);
+    //     // let races = this.races.filter(race => race.raceName.toLowerCase().startsWith(this.findRaceName.toLowerCase()));
+    //     // return races.sort((a, b) => a.race > b.race);
     //   }
     // },
     created() {
@@ -126,12 +144,24 @@
       fileChanged(event) {
           this.file = event.target.files[0]
       },
+      selectRace(race) {
+        console.log("Selected " + race.race);
+        this.findRaceName = "";
+        this.removeRace = race;
+      },
+      selectClass(_class) {
+        console.log("Select " + _class.class);
+        this.findClassName = "";
+        this.removeClass = _class;
+      },
       async uploadClass() {
         try {
           let c1 = await axios.post('/api/classes', {
             class: this.className
           });
           this.addClass = c1.data;
+          this.className = "";
+          this.getClasses();
         } catch (e) {
           console.log(e);
         }
@@ -147,6 +177,8 @@
             // description: this.description
           });
           this.addRace = r2.data;
+          this.raceName = "";
+          this.getRaces();
         } catch (error) {
           console.log(error);
         }
@@ -155,7 +187,7 @@
         try {
           let response = await axios.get("/api/classes");
           this.classes = response.data;
-          console.log(this.classes);
+          // console.log(this.classes);
           return true;
         } catch (error) {
           console.log(error);
@@ -170,6 +202,28 @@
           console.log(error);
         }
       },
+      async deleteClass(_class)
+      {
+        console.log(_class);
+        try {
+          await axios.delete("/api/classes/" + _class._id);
+          this.removeClass = null;
+          this.getClasses();
+          return true;
+        } catch (e) {
+          console.log(e);
+        }
+      },
+      async deleteRace(race) {
+        try {
+          await axios.delete("/api/races/" + race._id);
+          this.removeRace = null;
+          this.getRaces();
+          return true;
+        } catch (e) {
+          console.log(e);
+        }
+      }
       // selectItem(item) {
       //   this.findTitle = "";
       //   this.findItem = item;
@@ -205,22 +259,57 @@
 <style scoped>
   .box {
     display: flex;
+    border: 2px solid black;
     /* flex-flow: row; */
   }
 
-  .addThings {
+  .manage {
+    border: 2px solid pink;
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+  }
 
+  .addClasses {
+    border: 2px solid orange;
+    width: 49%; /*change to 40 for production*/
+  }
+
+  .addRaces {
+    border: 2px solid red;
+    width: 49%;
+  }
+
+  /* Uploaded images */
+  .upload {
+    border: 2px solid green;
+    width: 300px;
+    height: 400px;
+    justify-content: center;
+  }
+
+  .upload img {
+    max-width: 300px;
+  }
+
+  .removeContent {
+    border: 2px solid blue;
+    width: 50%;
+  }
+
+  .edit {
+    display: flex;
   }
 
   .list {
     /* float: left; */
     display: flex;
+    border: 2px solid green;
+    width: 50%;
+    /* margin-right: 0; */
     /* flex-flow: row; */
   }
 
-  /* .list ul {
-    display: block;
-  } */
   ul {
     list-style-type: none;
   }
@@ -230,11 +319,15 @@
   }
 
   .classes {
+    border: 2px solid orange;
+    width: 50%;
     /* float: left;
     clear: left; */
   }
 
   .races {
+    border: 2px solid red;
+    width: 50%;
     /* float: left; */
   }
 
@@ -252,11 +345,6 @@
   .heading h2 {
     margin-top: 8px;
     margin-left: 10px;
-  }
-
-  .add,
-  .edit {
-    display: flex;
   }
 
   .circle {
@@ -284,14 +372,7 @@
     margin-right: 50px;
   }
 
-  /* Uploaded images */
-  .upload h2 {
-    margin: 0px;
-  }
 
-  .upload img {
-    max-width: 300px;
-  }
 
   /* Suggestions */
   .suggestions {

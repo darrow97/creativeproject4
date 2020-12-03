@@ -143,6 +143,30 @@ app.delete('/api/characters/:id', async (req,res) => {
   }
 });
 
+app.delete('/api/classes/:id', async (req,res) => {
+  try {
+    await Class.deleteOne({
+      _id: req.params.id
+    });
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+app.delete('/api/races/:id', async (req,res) => {
+  try {
+    await Race.deleteOne({
+      _id: req.params.id
+    });
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
 app.put('/api/characters/:id', async (req,res) => {
   try {
     let character = await Character.findOne({
