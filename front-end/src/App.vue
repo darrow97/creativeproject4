@@ -9,7 +9,7 @@
     <div class="title">
       <h1>Fantasy Character Creator</h1>
       <div class="links">
-        <router-link to="/admin">Admin</router-link>
+        <router-link to="/admin">Admin </router-link>
         <router-link to="/creation">Character Creation</router-link>
       </div>
     </div>

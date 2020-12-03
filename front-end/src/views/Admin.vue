@@ -284,12 +284,21 @@
   .upload {
     border: 2px solid green;
     width: 300px;
-    height: 400px;
+    height: 440px;
     justify-content: center;
+    text-align: center;
   }
 
   .upload img {
-    max-width: 300px;
+    /* max-width: 300px; */
+    object-fit: cover;
+    /* position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+    height: 400px;
+    width: 300px;
   }
 
   .removeContent {
