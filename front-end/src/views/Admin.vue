@@ -3,103 +3,136 @@
     <h1>Administrative Page</h1>
     <div class="box">
       <!-- CLASS AND RACE CONTENT MANAGEMENT -->
-      <div class="manage">
-        <!-- ADD A CLASS -->
-        <div class="addClasses">
-          <div class="heading">
-            <div class="circle"></div>
-            <h2>Add a Class</h2>
+      <div class="superManage">
+        <div class="heading">
+          <h2>Database Management</h2>
+        </div>
+        <div class="manage">
+          <!-- <div class="heading">
+            <h2>Database Management</h2>
+          </div> -->
+          <div class="adding">
+            <!-- ADD A CLASS -->
+            <div class="addClasses">
+              <div class="heading">
+                <!-- <div class="circle"></div> -->
+                <h2>Add a Class</h2>
+              </div>
+              <div class="form">
+                <input v-model="className" placeholder="Enter a class type to add">
+                <button @click="uploadClass">Upload</button>
+              </div>
+            </div>
+            <!-- ADD A RACE -->
+            <div class="addRaces">
+              <div class="heading">
+                <!-- <div class="circle"></div> -->
+                <h2>Add a Race</h2>
+              </div>
+              <div class="form">
+                <input type="file" name="photo" @change="fileChanged">
+                <input v-model="raceName" placeholder="Enter a race type to add">
+                <button @click="uploadRace">Upload</button>
+                <div class="upload">
+                  <div v-if="addRace">
+                    <!-- <h2>{{addRace.race}}</h2> -->
+                    <img :src="addRace.path" />
+                    <!-- <p>{{addRace.description}}</p> -->
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="form">
-            <input v-model="className" placeholder="Enter a class type to add">
-            <button @click="uploadClass">Upload</button>
+          <!-- REMOVAL -->
+          <div class="removing">
+            <!-- REMOVE A CLASS -->
+            <div class="removeContent">
+              <div class="heading">
+                <!-- <div class="circle"></div> -->
+                <h2>Remove a Class</h2>
+              </div>
+              <div class="form">
+                <input v-if="removeClass" v-model="removeClass.class" placeholder="Remove class" readonly>
+                <input v-else placeholder="Select a class from the list" readonly>
+                <button @click="deleteClass(removeClass)">Remove</button>
+              </div>
+            </div>
+            <!-- REMOVE A RACE -->
+            <div class="removeContent">
+              <div class="heading">
+                <!-- <div class="circle"></div> -->
+                <h2>Remove a Race</h2>
+              </div>
+              <br>
+              <div class="form">
+                <input v-if="removeRace" v-model="removeRace.race" placeholder="Remove race" readonly>
+                <input v-else placeholder="Select a race from the list" readonly>
+                <button @click="deleteRace(removeRace)">Remove</button>
+              </div>
+            </div>
+            <!-- REMOVE A CHARACTER -->
+            <div class="removeContent">
+              <div class="heading">
+                <!-- <div class="circle"></div> -->
+                <h2>Remove a Character</h2>
+              </div>
+              <br>
+              <div class="form">
+                <input v-if="removeCharacter" v-model="removeCharacter.name" placeholder="Remove characer" readonly>
+                <input v-else placeholder="Select a character from the list" readonly>
+                <button @click="deleteCharacter(removeCharacter)">Remove</button>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- REMOVE A CLASS -->
-        <div class="removeContent">
-          <div class="heading">
-            <div class="circle"></div>
-            <h2>Remove a Class</h2>
-          </div>
-          <input v-if="removeClass" v-model="removeClass.class" placeholder="Remove class">
-          <input v-else placeholder="Select a class from the list">
-          <button @click="deleteClass(removeClass)">Remove</button>
-        </div>
-        <!-- ADD A RACE -->
-       <div class="addRaces">
-         <div class="heading">
-           <div class="circle"></div>
-           <h2>Add a Race</h2>
-         </div>
-         <div class="form">
-           <input type="file" name="photo" @change="fileChanged">
-           <input v-model="raceName" placeholder="Enter a race type to add">
-           <button @click="uploadRace">Upload</button>
-           <div class="upload">
-             <div v-if="addRace">
-               <h2>{{addRace.race}}</h2>
-               <img :src="addRace.path" />
-             <!-- <p>{{addRace.description}}</p> -->
-           </div>
-           </div>
-         </div>
-       </div>
-       <!-- REMOVE A RACE -->
-       <div class="removeContent">
-         <div class="heading">
-           <div class="circle"></div>
-           <h2>Remove a Race</h2>
-         </div>
-         <br>
-         <input v-if="removeRace" v-model="removeRace.race" placeholder="Remove race">
-         <input v-else placeholder="Select a race from the list">
-         <!-- <div class="suggestions" v-if="suggestions.length > 0">
-           <div class="suggestion" v-for="s in suggestions" :key="s.id" @click="selectRace(s)">{{s.race}}
-           </div>
-         </div> -->
-         <button @click="deleteRace(removeRace)">Remove</button>
-         <div class="upload">
-          <div v-if="removeRace">
-           <h2>{{removeRace.race}}</h2>
-           <img :src="removeRace.path" />
-           <!-- <p>{{addRace.description}}</p> -->
-         </div>
-         </div>
-
-       </div>
       </div>
-       <!-- LIST OF RACES AND CLASSES -->
-       <div class="list">
-         <div class="classes">
-           <div class="heading">
-             <div class="circle"></div>
-             <h2>Classes</h2>
-           </div>
-           <div>
-             <div v-for="_class in classes" :key="_class._id">
-               <ul>
-                 <li @click="selectClass(_class)">{{_class.class}}</li>
-               </ul>
-             </div>
-           </div>
-         </div>
-         <div class="races">
-           <div class="heading">
-             <div class="circle"></div>
-             <h2>Races</h2>
-           </div>
-           <div>
-             <div v-for="race in races" :key="race._id">
-               <ul>
-                 <li @click="selectRace(race)">{{race.race}}</li>
-               </ul>
-             </div>
-           </div>
-         </div>
-       </div>
+
+      <!-- LIST OF RACES AND CLASSES -->
+      <div class="superList">
+        <div class="heading">
+          <h2>Database Content</h2>
+        </div>
+        <div class="list">
+          <div class="classes">
+            <div class="heading">
+              <h2>Classes</h2>
+            </div>
+            <div>
+              <div v-for="_class in classes" :key="_class._id">
+                <ul>
+                  <li @click="selectClass(_class)">{{_class.class}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="races">
+            <div class="heading">
+              <h2>Races</h2>
+            </div>
+            <div>
+              <div v-for="race in races" :key="race._id">
+                <ul>
+                  <li @click="selectRace(race)">{{race.race}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="characters">
+            <div class="heading">
+              <h2>Characters</h2>
+            </div>
+            <div>
+              <div v-for="character in characters" :key="character._id">
+                <ul>
+                  <li @click="selectCharacter(character)">{{character.name}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-
   </div>
 </template>
 
@@ -108,41 +141,35 @@
 
   export default {
     name: 'Admin',
-    // components: {
-    //   admin
-    // },
     data() {
       return {
         className: "",
         raceName: "",
         file: null,
+        file2: null,
+        fileChosen: false,
         addRace: null,
         removeClass: null,
         removeRace: null,
+        removeCharacter: null,
         findRaceName: "",
         findClassName: "",
         findRace: null,
         findClass: null,
         classes: [],
         races: [],
-        // items: [],
-        // findTitle: "",
-        // findItem: null,
+        characters: []
       }
     },
-    // computed: {
-    //   suggestions() {
-    //     // let races = this.races.filter(race => race.raceName.toLowerCase().startsWith(this.findRaceName.toLowerCase()));
-    //     // return races.sort((a, b) => a.race > b.race);
-    //   }
-    // },
     created() {
       this.getClasses();
       this.getRaces();
+      this.getCharacters();
     },
     methods: {
       fileChanged(event) {
           this.file = event.target.files[0]
+          this.$forceUpdate();
       },
       selectRace(race) {
         console.log("Selected " + race.race);
@@ -153,6 +180,11 @@
         console.log("Select " + _class.class);
         this.findClassName = "";
         this.removeClass = _class;
+      },
+      selectCharacter(character) {
+        console.log("Select " + character.name);
+        this.findCharacterName = "";
+        this.removeCharacter = character;
       },
       async uploadClass() {
         try {
@@ -187,7 +219,6 @@
         try {
           let response = await axios.get("/api/classes");
           this.classes = response.data;
-          // console.log(this.classes);
           return true;
         } catch (error) {
           console.log(error);
@@ -197,6 +228,15 @@
         try {
           let response = await axios.get("/api/races");
           this.races = response.data;
+          return true;
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      async getCharacters() {
+        try {
+          let response = await axios.get("/api/characters");
+          this.characters = response.data;
           return true;
         } catch (error) {
           console.log(error);
@@ -223,66 +263,71 @@
         } catch (e) {
           console.log(e);
         }
-      }
-      // selectItem(item) {
-      //   this.findTitle = "";
-      //   this.findItem = item;
-      // },
-      // async deleteItem(item) {
-      //   try {
-      //     await axios.delete("/api/items/" + item._id);
-      //     this.findItem = null;
-      //     this.getItems();
-      //     return true;
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // },
-      // async editItem(item) {
-      //   try {
-      //     await axios.put("/api/items/" + item._id, {
-      //       title: this.findItem.title,
-      //       description: this.findItem.description
-      //     });
-      //     this.findItem = null;
-      //     this.getItems();
-      //     return true;
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
-      // },
+      },
+      async deleteCharacter(character) {
+        try {
+          await axios.delete("/api/characters/" + character._id);
+          this.removeCharcter = null;
+          this.getCharacters();
+          return true;
+        } catch (e) {
+          console.log(e);
+        }
+      },
     }
   }
 </script>
 
 
 <style scoped>
+  h1 {
+    border: 3px solid black;
+    background: #AF6B58;
+    text-align: center;
+  }
+
   .box {
     display: flex;
-    border: 2px solid black;
-    /* flex-flow: row; */
+    border: 3px solid black;
+    margin-bottom: 25px;
+    background: #CBBCB1;
+    font-weight: bold;
+  }
+
+  .superManage {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    border-right: 3px solid black;
   }
 
   .manage {
-    border: 2px solid pink;
-    width: 50%;
+    /* border: 2px solid pink; */
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .adding {
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    align-content: center;
+    justify-content: center;
   }
 
   .addClasses {
-    border: 2px solid orange;
-    width: 49%; /*change to 40 for production*/
+    width: 100%;
+    margin-bottom: 30px;
   }
 
   .addRaces {
-    border: 2px solid red;
-    width: 49%;
+    width: 100%;
   }
 
   /* Uploaded images */
   .upload {
-    border: 2px solid green;
     width: 300px;
     height: 440px;
     justify-content: center;
@@ -290,111 +335,103 @@
   }
 
   .upload img {
-    /* max-width: 300px; */
-    object-fit: cover;
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0; */
+    object-fit: scale-down;
     height: 400px;
     width: 300px;
   }
 
-  .removeContent {
-    border: 2px solid blue;
+  .removing {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     width: 50%;
+    align-content: center;
+    border-left: 2px solid black;
   }
 
-  .edit {
+  .removeContent {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .superList {
     display: flex;
+    flex-direction: column;
+    width: 50%;
+    /* align-items: center; */
   }
 
   .list {
-    /* float: left; */
     display: flex;
-    border: 2px solid green;
-    width: 50%;
-    /* margin-right: 0; */
-    /* flex-flow: row; */
+    flex-direction: row;
+    width: 100%;
   }
 
   ul {
     list-style-type: none;
+    font-weight: bold;
+    margin-left: 4%;
+    margin-right: 4%;
   }
 
   li {
-    display: block;
+    width: 100%;
+    margin-left: -8%;
+    text-align: center;
   }
 
   .classes {
-    border: 2px solid orange;
-    width: 50%;
-    /* float: left;
-    clear: left; */
+    width: 33%;
+    border-right: 2px solid black;
   }
 
   .races {
-    border: 2px solid red;
-    width: 50%;
-    /* float: left; */
+    width: 33%;
+    border-right: 2px solid black;
   }
 
-  /* .image h2 {
-    font-style: italic;
-    font-size: 1em;
-  } */
+  .characters {
+    width: 33%;
+  }
 
   .heading {
     display: flex;
     margin-bottom: 20px;
     margin-top: 20px;
+    margin-left: 4%;
+    margin-right: 4%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    background: #F2EFEA;
+    opacity: .8;
+    font-weight: bolder;
+    justify-content: center;
   }
 
   .heading h2 {
-    margin-top: 8px;
-    margin-left: 10px;
+    margin: 5px;
   }
-
-  .circle {
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    padding: 8px;
-    background: #333;
-    color: #fff;
-    text-align: center
-  }
-
-
 
   /* Form */
   input,
-  textarea,
-  select,
   button {
     font-family: 'Montserrat', sans-serif;
     font-size: 1em;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+  input {
+    margin-right: 2px;
+  }
+
+  button {
+    margin-left: 2px;
   }
 
   .form {
-    margin-right: 50px;
-  }
-
-
-
-  /* Suggestions */
-  .suggestions {
-    width: 200px;
-    border: 1px solid #ccc;
-  }
-
-  .suggestion {
-    min-height: 20px;
-  }
-
-  .suggestion:hover {
-    background-color: #5BDEFF;
-    color: #fff;
+    margin-left: 13%;
+    margin-right: 13%;
+    opacity: .9;
   }
 </style>

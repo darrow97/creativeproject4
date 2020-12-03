@@ -1,25 +1,18 @@
 <template>
 <div id="app">
   <div class="header">
-    <router-link to="/">
-      <div class="logo">
-        <img src="/ordinary.png">
-      </div>
-    </router-link>
     <div class="title">
-      <h1>Fantasy Character Creator</h1>
+      <h1>~ Fantasy Character Creator ~</h1>
       <div class="links">
-        <router-link to="/admin">Admin </router-link>
-        <router-link to="/creation">Character Creation</router-link>
+        <router-link to="/" class="subLink">Characters Page</router-link>
+        <router-link to="/admin" class="subLink">Admin </router-link>
+        <router-link to="/creation" class="subLink">Character Creation</router-link>
       </div>
     </div>
   </div>
   <div class="content">
     <router-view />
   </div>
-  <!-- <div class="footer">
-
-  </div> -->
   <footer>
       <a href="https://github.com/darrow97/creativeproject4" target="_blank">Click here for access to the Git Repository</a>
     </footer>
@@ -37,29 +30,54 @@ body {
   background: #fff;
   padding: 0px;
   margin: 0px;
+  min-height: 900px;
+  background:
+    radial-gradient(black 15%, transparent 16%) 0 0,
+    radial-gradient(black 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+  background-color: #556052;
+  background-size:16px 16px;
 }
-
-
 
 /* Header */
 .header {
   display: flex;
   padding: 10px 100px 0px 100px;
-  background-color: #5BDEFF;
-  color: #1C454F;
+  background-color: #AF6B58;
+  color: #000000;
+  justify-content: center;
+  border-bottom: 3px solid black;
 }
 
 .title {
   margin-top: 5px;
+  margin-bottom: 5PX;
+  justify-content: center;
 }
 
 .title h1 {
   font-size: 30px;
+  margin: 10px;
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-decoration: none;
+  color: #000000;
+  /* border: 2px solid yellow; */
+}
+
+.subLink {
+  color: #000000;
+  font-weight: bold;
 }
 
 .content {
   padding: 20px 100px;
-  min-height: 500px;
+  min-height: 700px;
 }
 
 /* Footer */
@@ -91,9 +109,5 @@ footer a {
 
 h1 {
   font-size: 20px;
-}
-
-h2 {
-  font-size: 14px;
 }
 </style>

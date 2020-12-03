@@ -17,7 +17,7 @@ mongoose.connect('mongodb://localhost:27017/fantasyCreation', {
 // Configure multer so that it will upload to '../front-end/public/images'
 const multer = require('multer')
 const upload = multer({
-  dest: '../front-end/public/images/', ///var/www/museum.nerdxlife.net/images/
+  dest: '/var/www/creativeproject4.nerdxlife.net/images/',
   limits: {
     fileSize: 10000000
   }
@@ -59,12 +59,13 @@ app.post('/api/photos', upload.single('photo'), async (req, res) => {
 // Create a new item in the museum: takes a title and a path to an image.
 app.post('/api/characters', async (req, res) => {
   const character = new Character({
-    name: req.body.title,
+    name: req.body.name,
     race: req.body.race,
     class: req.body.class,
     path: req.body.path
     // description: req.body.description
   });
+  console.log(character);
   try {
     await character.save();
     res.send(character);
@@ -183,4 +184,4 @@ app.put('/api/characters/:id', async (req,res) => {
 });
 
 
-app.listen(8080, () => console.log('Server listening on port 8080!'));
+app.listen(3000, () => console.log('Server listening on port 3000!'));

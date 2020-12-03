@@ -7,6 +7,7 @@ import Creation from '../views/Creation.vue'
 Vue.use(VueRouter)
 
 const routes = [{
+    title: 'Home Page',
     path: '/',
     name: 'home',
     component: Home

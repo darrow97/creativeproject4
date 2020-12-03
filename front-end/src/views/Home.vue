@@ -1,14 +1,27 @@
 <template>
-  <div class="home">
-    <section class="image-gallery">
-      <div class="image" v-for="character in characters" :key="character.id">
-        <img :src="character.path" />
-        <h2>{{character.name}}</h2>
-        <h3>{{character.race}}</h3>
-        <!-- <p>{{character.description}}</p> -->
-      </div>
-    </section>
+  <div>
+    <h1>Characters</h1>
+    <div class="home">
+      <section class="image-gallery">
+        <div class="characterSlot" v-for="character in characters" :key="character.id">
+          <img :src="character.path"/>
+          <div class="name">
+            <h2>{{character.name}}</h2>
+            <h5>NAME</h5>
+          </div>
+          <div class="race">
+            <h4>{{character.race}}</h4>
+            <h5>RACE</h5>
+          </div>
+          <div class="class">
+            <h4>{{character.class}}</h4>
+            <h5>CLASS</h5>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -40,35 +53,73 @@ export default {
 </script>
 
 <style scoped>
-  .image h2 {
-    font-style: italic;
+  h1 {
+    border: 3px solid black;
+    background: #AF6B58;
+    text-align: center;
   }
 
-  /* Masonry */
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
+  .home {
+    display: flex;
+    margin-bottom: 50px;
   }
 
   .image-gallery {
-    column-gap: 1.5em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 
-  .image {
-    margin: 0 0 1.5em;
-    display: inline-block;
-    width: 100%;
+  .characterSlot {
+    border: 3px solid black;
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+    width: 400px;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    background-color: #CBBCB1;
+    background-blend-mode: hue;
   }
 
-  .image img {
-    width: 100%;
+  .characterSlot img {
+    width: 350px;
+    height: 400px;
+    object-fit: scale-down;
   }
 
-  /* p
-  {
-    color: #0a0a0a;
-  } */
+  h2, h3, h4, h5 {
+    margin: 0;
+    text-align: center;
+  }
+
+  h2, h4 {
+    border-bottom: 1px solid black;
+  }
+
+  h5 {
+    font-size: 11px;
+  }
+
+  .name {
+    /* border: 2px solid green; */
+    margin: 3px;
+    width: 80%;
+  }
+
+  .race {
+    /* border: 2px solid pink; */
+    margin: 3px;
+    width: 60%;
+  }
+
+  .class {
+    /* border: 2px solid blue; */
+    margin: 3px;
+    width: 60%;
+  }
 
   /* Masonry on large screens */
   @media only screen and (min-width: 1024px) {

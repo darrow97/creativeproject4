@@ -4,7 +4,6 @@
     <div class="builder">
       <div class="races">
         <div class="heading">
-          <div class="circle"/>
           <h2>Races</h2>
           </div>
           <div v-for="race in races" :key="race._id">
@@ -14,16 +13,27 @@
         </div>
       </div>
       <div class="appearance">
+        <div v-if="buildMessage.length > 0">
+          {{this.buildMessage}}
+        </div>
+        <!-- IMAGE -->
         <img v-if="selectedRace" :src="selectedRace.path" alt="Your character will appear here">
-        <input type="text" placeholder="Enter your character's name">
-        <input v-if="selectedRace" v-model="selectedRace.race">
-        <input v-else placeholder="Select a race from the left">
-        <input v-if="selectedClass" v-model="selectedClass.class">
-        <input v-else placeholder="Select a class from the right">
+        <div v-else class="imageSpace"/>
+        <!-- NAME -->
+        <input v-model="characterName" placeholder="Enter your character's name">
+        <!-- RACE -->
+        <input v-if="selectedRace" v-model="selectedRace.race" readonly>
+        <input v-else placeholder="Select a race from the left" readonly>
+        <!-- CLASS -->
+        <input v-if="selectedClass" v-model="selectedClass.class" readonly>
+        <input v-else placeholder="Select a class from the right" readonly>
+        <div v-if="isCharacterReady">
+          <button  @click="createCharacter">Create the character!</button>
+        </div>
+        <!-- <button v-else >Build your character</button> -->
       </div>
       <div class="classes">
         <div class="heading">
-          <div class="circle"/>
           <h2>Classes</h2>
         </div>
         <div v-for="_class in classes" :key="_class._id">
@@ -45,8 +55,14 @@
         races: [],
         classes: [],
         path: "",
+        characterName: "",
+        buildMessage: "",
         selectedClass: null,
         selectedRace: null,
+        createdCharacter: null,
+        raceSelected: false,
+        classSelected: false,
+        isCharacterReady: false
       }
     },
     created() {
@@ -76,11 +92,47 @@
       selectClass(_class) {
         console.log(_class.class);
         this.selectedClass = _class;
+        this.classSelected = true;
+        this.characterReady();
       },
       selectRace(race) {
         console.log(race.race + " " + race.path);
         this.selectedRace = race;
+        this.raceSelected = true;
+        this.characterReady();
       },
+      characterReady() {
+        if(this.selectedRace && this.selectedClass) this.isCharacterReady = true;
+        else this.isCharacterReady = false;
+        this.$forceUpdate();
+      },
+      async createCharacter() {
+        console.log(this.characterName);
+        try {
+          let character = await axios.post('/api/characters', {
+
+            race: this.selectedRace.race,
+            name: this.characterName,
+            class: this.selectedClass.class,
+            path: this.selectedRace.path
+          });
+
+          console.log(character);
+
+          this.addCharacter = character.data;
+          this.buildMessage = "Last character created was " + this.characterName;
+          this.characterName = "";
+          this.selectedRace = null;
+          this.selectedClass = null;
+          this.isCharacterReady = false;
+          this.$forceUpdate();
+
+          console.log("Created!");
+        } catch (e) {
+          console.log(e);
+        }
+
+      }
     }
   }
 </script>
@@ -89,63 +141,94 @@
   /* .creator {
     border: 2px solid black;
   } */
+  h1 {
+    background: #AF6B58;
+    text-align: center;
+    border: 3px solid black;
+  }
+
+
 
   .builder {
-    border: 2px solid black;
+    border: 3px solid black;
     display: flex;
     flex-direction: row;
     height: 700px;
   }
 
+  ul {
+    list-style-type: none;
+    font-weight: bold;
+    margin-left: 4%;
+    margin-right: 4%;
+  }
+
+  li {
+    width: 100%;
+    margin-left: -8%;
+    text-align: center;
+  }
+
   .races {
-    border: 2px solid pink;
     width: 20%;
+    background-color: #CBBCB1;
+    border-right: 1px solid black;
+    text-decoration: none;
   }
 
   .appearance {
-    border: 2px solid green;
     width: 60%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #F2EFEA;
+
+  }
+
+  .appearance input {
+    margin: 10px;
   }
 
   .appearance img {
     width: 350px;
     height: 450px;
+    /* object-fit: contain; */
+    object-fit: scale-down;
+  }
+
+  .imageSpace {
+    width: 350px;
+    height:450px;
   }
 
   .classes {
-    border: 2px solid yellow;
     width: 20%;
+    background-color: #CBBCB1;
+    border-left: 1px solid black;
   }
 
   .heading {
     display: flex;
-    flex-direction: row;
     margin-bottom: 20px;
     margin-top: 20px;
+    margin-left: 4%;
+    margin-right: 4%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    background: white;
+    opacity: .8;
+    font-weight: bolder;
+    justify-content: center;
   }
 
   .heading h2 {
-    margin-top: 8px;
-    margin-left: 10px;
+    margin: 5px;
   }
 
   input {
     text-align: center;
     width: 340px;
     height: 25px;
-  }
-
-  .circle {
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    padding: 8px;
-    background: #333;
-    color: #fff;
-    text-align: center
   }
 </style>
